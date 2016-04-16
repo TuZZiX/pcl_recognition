@@ -28,17 +28,21 @@ find_package(Boost REQUIRED COMPONENTS system thread)
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
 
 # Libraries: uncomment the following and edit arguments to create a new library
-cs_add_library(pcl_basic src/pcl_utils.cpp)  
+cs_add_library(pcl_lib src/pcl_utils.cpp)  
 
 # Executables: uncomment the following and edit arguments to compile new nodes
 # may add more of these lines for more nodes from the same package
 #cs_add_executable(pcl_recognition src/pcl_recognition.cpp)
 cs_add_executable(recognition_test src/correspondence_grouping.cpp)
+cs_add_executable (cluster_extraction src/cluster_extraction.cpp)
+cs_add_executable (find_stool src/find_plane_pcd_file.cpp)
 
 #the following is required, if desire to link a node in this package with a library created in this same package
 # edit the arguments to reference the named node and named library within this package
 #target_link_libraries(pcl_recognition pcl_basic)
 target_link_libraries (recognition_test ${PCL_LIBRARIES})
+target_link_libraries (cluster_extraction ${PCL_LIBRARIES})
+target_link_libraries (find_stool pcl_lib ${PCL_LIBRARIES})
 
 cs_install()
 cs_export()

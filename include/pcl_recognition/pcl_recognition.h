@@ -16,33 +16,21 @@
 #include <geometry_msgs/PointStamped.h>
 #include <geometry_msgs/TransformStamped.h>
 
-#include <cwru_msgs/PatchParams.h>
-
 #include <tf/transform_listener.h>  // transform listener headers
 #include <tf/transform_broadcaster.h>
+
+#include <pcl_ros/point_cloud.h>
+#include <pcl/ros/conversions.h>
+#include <pcl_ros/transforms.h>
 
 #include <pcl/io/io.h>
 #include <pcl/io/pcd_io.h>  //point-cloud library headers; likely don't need all these
 #include <pcl/point_types.h>
 #include <pcl/point_cloud.h>
-#include <pcl_ros/point_cloud.h>
-#include <pcl/ros/conversions.h>
 #include <pcl/features/normal_3d.h>
 #include <pcl/filters/extract_indices.h>
-#include <pcl_ros/transforms.h>
-#include <pcl-1.7/pcl/impl/point_types.hpp>
-#include <stdlib.h>
-#include <math.h>
-#include <sensor_msgs/PointCloud2.h>
-//#include <pcl/PCLPointCloud2.h> //PCL is migrating to PointCloud2
-#include <pcl/common/common_headers.h>
-#include <pcl-1.7/pcl/point_cloud.h>
-#include <pcl-1.7/pcl/PCLHeader.h>
-
-//will use filter objects "passthrough" and "voxel_grid" in this example
 #include <pcl/filters/passthrough.h>
 #include <pcl/filters/voxel_grid.h>
-#include <pcl/io/pcd_io.h>
 #include <pcl/correspondence.h>
 #include <pcl/features/normal_3d_omp.h>
 #include <pcl/features/shot_omp.h>
@@ -54,6 +42,7 @@
 #include <pcl/kdtree/kdtree_flann.h>
 #include <pcl/kdtree/impl/kdtree_flann.hpp>
 #include <pcl/common/transforms.h>
+#include <pcl/common/common_headers.h>
 #include <pcl/console/parse.h>
 
 
@@ -84,7 +73,6 @@ public:
     Eigen::Vector3f  compute_centroid(pcl::PointCloud<pcl::PointXYZ> &input_cloud);
     
     void fit_points_to_plane(pcl::PointCloud<pcl::PointXYZ>::Ptr input_cloud_ptr,Eigen::Vector3f &plane_normal, double &plane_dist);
-    void fit_xformed_selected_pts_to_plane(Eigen::Vector3f &plane_normal, double &plane_dist);  
 
 // 
 // 

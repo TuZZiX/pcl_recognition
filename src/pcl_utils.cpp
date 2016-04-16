@@ -11,7 +11,6 @@ pclTransformed_ptr_(new PointCloud<pcl::PointXYZ>), pclSelectedPoints_ptr_(new P
         pclSelectedPtsClr_ptr_(new PointCloud<pcl::PointXYZRGB>),
 pclTransformedSelectedPoints_ptr_(new PointCloud<pcl::PointXYZ>),pclGenPurposeCloud_ptr_(new PointCloud<pcl::PointXYZ>) {
 
-    
     initializeSubscribers();
     initializePublishers();
     got_kinect_cloud_ = false;
@@ -252,26 +251,6 @@ Eigen::Vector3f  PclUtils::compute_centroid(pcl::PointCloud<pcl::PointXYZ> &inpu
     return centroid;
 }
 
-// this fnc operates on transformed selected points
-
-void PclUtils::fit_xformed_selected_pts_to_plane(Eigen::Vector3f &plane_normal, double &plane_dist) {
-    fit_points_to_plane(pclTransformedSelectedPoints_ptr_, plane_normal, plane_dist);
-    //Eigen::Vector3f centroid;
-    cwru_msgs::PatchParams patch_params_msg;
-    //compute the centroid; this is redundant w/ computation inside fit_points...oh well.
-    // now the centroid computed by plane fit is stored in centroid_ member var
-    //centroid = compute_centroid(pclTransformedSelectedPoints_ptr_);
-
-    patch_params_msg.offset = plane_dist;
-    patch_params_msg.centroid.resize(3);
-    patch_params_msg.normal_vec.resize(3);
-    for (int i=0;i<3;i++) {
-        patch_params_msg.normal_vec[i]=plane_normal[i];
-        patch_params_msg.centroid[i]= centroid_[i];
-    }
-    patch_params_msg.frame_id = "torso";
-    patch_publisher_.publish(patch_params_msg);
-}
 
 Eigen::Affine3f PclUtils::transformTFToEigen(const tf::Transform &t) {
     Eigen::Affine3f e;
@@ -809,7 +788,6 @@ void PclUtils::initializeSubscribers() {
 void PclUtils::initializePublishers() {
     ROS_INFO("Initializing Publishers");
     pointcloud_publisher_ = nh_.advertise<sensor_msgs::PointCloud2>("cwru_pcl_pointcloud", 1, true);
-    patch_publisher_ = nh_.advertise<cwru_msgs::PatchParams>("pcl_patch_params", 1, true);
     //add more publishers, as needed
     // note: COULD make minimal_publisher_ a public member function, if want to use it within "main()"
 }
