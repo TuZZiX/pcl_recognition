@@ -82,10 +82,13 @@ main (int argc, char** argv)
 	vote_list->findStrongestPeaks (strongest_peaks, testing_class, radius, sigma);
 
 	pcl::PointCloud <pcl::PointXYZRGB>::Ptr colored_cloud = (new pcl::PointCloud<pcl::PointXYZRGB>)->makeShared ();
+
 	colored_cloud->height = 0;
 	colored_cloud->width = 1;
 
 	pcl::PointXYZRGB point;
+
+	/*
 	point.r = 255;
 	point.g = 255;
 	point.b = 255;
@@ -98,6 +101,8 @@ main (int argc, char** argv)
 		colored_cloud->points.push_back (point);
 	}
 	colored_cloud->height += testing_cloud->points.size ();
+*/
+	colored_cloud = vote_list->getColoredCloud(testing_cloud);
 
 	point.r = 255;
 	point.g = 0;
