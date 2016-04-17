@@ -18,7 +18,10 @@ find_package(Eigen REQUIRED)
 include_directories(${EIGEN3_INCLUDE_DIR})
 add_definitions(${EIGEN_DEFINITIONS})
 
+
 catkin_simple()
+
+set(CMAKE_BUILD_TYPE Release)
 
 # example boost usage
 find_package(Boost REQUIRED COMPONENTS system thread)
@@ -36,6 +39,8 @@ cs_add_library(pcl_lib src/pcl_utils.cpp)
 cs_add_executable(recognition_test src/correspondence_grouping.cpp)
 cs_add_executable (cluster_extraction src/cluster_extraction.cpp)
 cs_add_executable (find_stool src/find_plane_pcd_file.cpp)
+#cs_add_executable (remove_outliers src/remove_outliers.cpp)
+cs_add_executable (implicit_shape_model src/implicit_shape_model.cpp)
 
 #the following is required, if desire to link a node in this package with a library created in this same package
 # edit the arguments to reference the named node and named library within this package
@@ -43,6 +48,8 @@ cs_add_executable (find_stool src/find_plane_pcd_file.cpp)
 target_link_libraries (recognition_test ${PCL_LIBRARIES})
 target_link_libraries (cluster_extraction ${PCL_LIBRARIES})
 target_link_libraries (find_stool pcl_lib ${PCL_LIBRARIES})
+#target_link_libraries (remove_outliers ${PCL_LIBRARIES})
+target_link_libraries (implicit_shape_model ${PCL_LIBRARIES})
 
 cs_install()
 cs_export()
