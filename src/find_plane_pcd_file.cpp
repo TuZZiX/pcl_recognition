@@ -9,52 +9,9 @@
 //wsn March 2016
 
 #include <pcl_recognition/pcl_recognition.h>  //a local library with some utility fncs
-#include <tuple>
-#include <algorithm>
-#include <stdint.h>
-
-void rgb2hsl( float r, float g, float b , float h, float s, float l) { // ranges: input[0..255], output[0..1]
-    r /= 255, g /= 255, b /= 255;
-    float max = std::max(std::max(r, g), b), min = std::min(std::min(r, g), b);
-    l = (max + min) / 2;
-    if( max != min ) {
-        float d = max - min;
-        s = l > 0.5f ? d / (2 - max - min) : d / (max + min);
-        /**/ if(max == r) h = (g - b) / (d + (g < b ? 6 : 0));
-        else if(max == g) h = (b - r) / (d + 2);
-        else              h = (r - g) / (d + 4);
-        h /= 6.f;
-        return;
-    }
-    h = 0.f;
-    s = 0.f;
-}
-std::tuple<uint8_t,uint8_t,uint8_t> hsl2rgb( float h, float s, float l ) { // ranges: input[0..1], output[0..255]
-    if( s > 0 ) {
-        auto hue2rgb = [&](float p, float q, float t){
-            if(t < 0) t += 1;
-            if(t > 1) t -= 1;
-            if(t < 1/6.f) return p + (q - p) * 6 * t;
-            if(t < 1/2.f) return q;
-            if(t < 2/3.f) return p + (q - p) * (2/3.f - t) * 6;
-            return p;
-        };
-        float q = l < 0.5f ? l * (1 + s) : l + s - l * s;
-        float p = 2 * l - q;
-        return std::tuple<uint8_t,uint8_t,uint8_t>{
-                uint8_t( 255 * hue2rgb(p, q, h + 1/3.f) ),
-                uint8_t( 255 * hue2rgb(p, q, h) ),
-                uint8_t( 255 * hue2rgb(p, q, h - 1/3.f) ) };
-    }
-    uint8_t rgb = uint8_t( 255 * l ); // achromatic
-    return std::tuple<uint8_t,uint8_t,uint8_t>{ rgb, rgb, rgb };
-}
-// usage: float h,s,l; std::tie(h,s,l) = rgb2hsl( 255, 192, 127 );
-// usage: unsigned char r,g,b; std::tie(r,g,b) = hsl2rgb( 0.75f, 0.5f, 0.5f );
-
-const double filter_range = 0.195;
 
 #define sq(a)   (pow(a,2))
+
 PclUtils *g_pcl_utils_ptr;
 
 
@@ -97,8 +54,8 @@ void find_indices_of_plane_from_patch(pcl::PointCloud<pcl::PointXYZRGB>::Ptr inp
     //This fnc populates the reference arg "indices", so the calling fnc gets the list of interesting points
 }
 
-void segment_filter(pcl::PointCloud<pcl::PointXYZRGB>::Ptr input_cloud_ptr, pcl::PointCloud<pcl::PointXYZ>::Ptr patch_cloud_ptr,
-                    vector<int> &indices, vector<int> &filtered_indices, double &centroid_indices) {
+void sphare_filter(pcl::PointCloud<pcl::PointXYZRGB>::Ptr input_cloud_ptr, pcl::PointCloud<pcl::PointXYZ>::Ptr patch_cloud_ptr,
+                    vector<int> &indices, vector<int> &filtered_indices, double &centroid_indices, double filter_range) {
     // find largest segment in the indices
     double sq_range = sq(filter_range);
     double best_indices = -1;
@@ -110,9 +67,6 @@ void segment_filter(pcl::PointCloud<pcl::PointXYZRGB>::Ptr input_cloud_ptr, pcl:
         centroid += patch_cloud_ptr->points[i].getVector3fMap();
     }
     centroid /= patch_cloud_ptr->points.size();
-    float h,s,l;
-    std::tie(h,s,l) = rgb2hsl( 255, 192, 127 );
-
 
     for (int i = 0; i < indices.size(); ++i) {
         int current_cnt = 0;
@@ -147,23 +101,28 @@ void segment_filter(pcl::PointCloud<pcl::PointXYZRGB>::Ptr input_cloud_ptr, pcl:
             filtered_indices.push_back(indices[k]);
         }
     }
-    cout << "number of points after segment filter = " << filtered_indices.size() << endl;
+    cout << "number of points after sphare filter = " << filtered_indices.size() << endl;
     centroid_indices = best_indices;
 }
 
-void solve_p9(pcl::PointCloud<pcl::PointXYZRGB>::Ptr input_cloud_ptr, vector<int> &indices,
+void find_normal_centroid(pcl::PointCloud<pcl::PointXYZRGB>::Ptr input_cloud_ptr, vector<int> &indices,
                     Eigen::Vector3f &plane_normal, Eigen::Vector3f &plane_centroid, double &plane_distance) {
     float curvature;
     Eigen::Vector4f plane_parameters;
-
     pcl::PointCloud<pcl::PointXYZRGB>::Ptr temp_cloud_ptr(new pcl::PointCloud<pcl::PointXYZRGB>); //pointer for color version of pointcloud
-    pcl::copyPointCloud(*input_cloud_ptr, indices, *temp_cloud_ptr); //extract these pts into new cloud
 
+    pcl::copyPointCloud(*input_cloud_ptr, indices, *temp_cloud_ptr); //extract these pts into new cloud
     pcl::computePointNormal(*temp_cloud_ptr, plane_parameters, curvature); //pcl fnc to compute plane fit to point cloud
     plane_normal[0] = plane_parameters[0];
     plane_normal[1] = plane_parameters[1];
     plane_normal[2] = plane_parameters[2];
     plane_distance = plane_parameters[3];
+
+    Eigen::Affine3f A_plane_wrt_camera;
+    // here, use a utility function in pclUtils to construct a frame on the computed plane
+    A_plane_wrt_camera = g_pcl_utils_ptr->make_affine_from_plane_params(plane_parameters);
+    Eigen::Vector3f camera_pos = Eigen::MatrixXf::Zero(3, 1);
+    camera_pos = A_plane_wrt_camera.inverse() * camera_pos;
 
     plane_centroid = Eigen::MatrixXf::Zero(3, 1);
     for (int i = 0; i < temp_cloud_ptr->points.size(); ++i) {
@@ -171,9 +130,10 @@ void solve_p9(pcl::PointCloud<pcl::PointXYZRGB>::Ptr input_cloud_ptr, vector<int
     }
     plane_centroid /= temp_cloud_ptr->points.size();
 
-    cout << "Normal of stool: " << plane_normal.transpose() << endl;
-    cout << "Plane distance of stool: " << plane_distance << endl;
-    cout << "Centroid of stool: " << plane_centroid.transpose() << endl;
+    cout << "Normal of plane: " << plane_normal.transpose() << endl;
+    cout << "Centroid of plane: " << plane_centroid.transpose() << endl;
+    cout << "Camera height related to plane: " << fabs(plane_distance) << endl;
+
 }
 
 int main(int argc, char** argv) {
@@ -191,8 +151,11 @@ int main(int argc, char** argv) {
     Eigen::Vector3f plane_centroid;
     double plane_distance;
     double center_indices;
-
+    double filter_range = 0.195;
+    double voxel_size = 0.01f;
     string fname;
+
+    int selection;
 
     if (argc < 2) {
         cout << "Please input the filename of PCD file" << fname << endl;
@@ -218,24 +181,33 @@ int main(int argc, char** argv) {
 
     sensor_msgs::PointCloud2 ros_cloud, ros_planar_cloud, downsampled_cloud, filtered_cloud; //here are ROS-compatible messages
     pcl::toROSMsg(*pclKinect_clr_ptr, ros_cloud); //convert from PCL cloud to ROS message this way
+    cout << "num bytes in original cloud data = " << pclKinect_clr_ptr->points.size() << endl;
 
     //use voxel filtering to downsample the original cloud:
-    cout << "starting voxel filtering" << endl;
+    cout << "voxel filtering to size: "<< voxel_size << endl;
     pcl::VoxelGrid<pcl::PointXYZRGB> vox;
     vox.setInputCloud(pclKinect_clr_ptr);
-
-    vox.setLeafSize(0.02f, 0.02f, 0.02f);
+    vox.setLeafSize(voxel_size, voxel_size, voxel_size);
     vox.filter(*downsampled_kinect_ptr);
-    cout << "done voxel filtering" << endl;
 
-    cout << "num bytes in original cloud data = " << pclKinect_clr_ptr->points.size() << endl;
     cout << "num bytes in filtered cloud data = " << downsampled_kinect_ptr->points.size() << endl; // ->data.size()<<endl;    
     pcl::toROSMsg(*downsampled_kinect_ptr, downsampled_cloud); //convert to ros message for publication and display
 
     PclUtils pclUtils(&nh); //instantiate a PclUtils object--a local library w/ some handy fncs
     g_pcl_utils_ptr = &pclUtils; // make this object shared globally, so above fnc can use it too
 
+    cout << "Load profile: say 1 to search for stool, and say 2 to search for coke can" << endl << "Profile: ";
+    cin >> selection;
+    if (selection == 1) {
+        filter_range = 0.195;
+    } else if (selection == 2) {
+        filter_range = 0.1;
+    } else {
+        cout << "Wrong input!" <<endl;
+        return 0;
+    }
     cout << " select a patch of points to find corresponding plane..." << endl; //prompt user action
+
     //loop to test for new selected-points inputs and compute and display corresponding planar fits 
     while (ros::ok()) {
         if (pclUtils.got_selected_points()) { //here if user selected a new patch of points
@@ -248,8 +220,9 @@ int main(int argc, char** argv) {
             // can extract indices from original cloud, or from voxel-filtered (down-sampled) cloud
             //find_indices_of_plane_from_patch(pclKinect_clr_ptr, selected_pts_cloud_ptr, indices);
             find_indices_of_plane_from_patch(downsampled_kinect_ptr, selected_pts_cloud_ptr, transformed_cloud_ptr, indices);
-            segment_filter(downsampled_kinect_ptr, selected_pts_cloud_ptr, indices, filterd_indices, center_indices);
-            solve_p9(downsampled_kinect_ptr, filterd_indices,  plane_normal, plane_centroid, plane_distance);
+            sphare_filter(downsampled_kinect_ptr, selected_pts_cloud_ptr, indices, filterd_indices, center_indices, filter_range);
+            find_normal_centroid(downsampled_kinect_ptr, filterd_indices,  plane_normal, plane_centroid, plane_distance);
+
             pcl::copyPointCloud(*downsampled_kinect_ptr, indices, *plane_pts_ptr); //extract these pts into new cloud
             //the new cloud is a set of points from original cloud, coplanar with selected patch; display the result
             pcl::toROSMsg(*plane_pts_ptr, ros_planar_cloud); //convert to ros message for publication and display

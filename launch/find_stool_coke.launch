@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<launch>
+	<node name="find_stool_coke" pkg="pcl_recognition" type="find_stool_coke" args="$(find pcl_recognition)/pcd/coke_can.pcd" output="screen"/>
+	<!-- launch rviz using a specific config file -->
+	<node pkg="rviz" type="rviz" name="rviz" args="-d $(find pcl_recognition)/launch/stool_coke.rviz"/>
+</launch>
