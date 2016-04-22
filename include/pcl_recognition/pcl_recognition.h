@@ -109,15 +109,15 @@ public:
     void reset_got_selected_points() {got_selected_points_= false;};    
     bool got_kinect_cloud() { return got_kinect_cloud_; };
     bool got_selected_points() {return got_selected_points_;};
-    void save_kinect_snapshot() {    pcl::io::savePCDFileASCII ("kinect_snapshot.pcd", *pclKinect_ptr_);}; //B/W
+    void save_kinect_snapshot(string filename) {    pcl::io::savePCDFileASCII (filename, *pclKinect_ptr_);}; //B/W
     int read_pcd_file(string fname); 
     int read_clr_pcd_file(string fname);
     
     //alternative "save" fnc: save as a colored pointcloud
-    void save_kinect_clr_snapshot() {pcl::io::savePCDFileASCII ("kinect_clr_snapshot.pcd", *pclKinect_clr_ptr_);};
-    int  save_kinect_clr_snapshot_binary() {return(pcl::io::savePCDFile ("kinect_clr_snapshot_bin.pcd", *pclKinect_clr_ptr_,true));};	
+    void save_kinect_clr_snapshot(string filename) {pcl::io::savePCDFileASCII (filename, *pclKinect_clr_ptr_);};
+    int  save_kinect_clr_snapshot_binary(string filename) {return(pcl::io::savePCDFile (filename, *pclKinect_clr_ptr_,true));};
 
-    void save_transformed_kinect_snapshot() { pcl::io::savePCDFileASCII ("xformed_kinect_snapshot.pcd", *pclTransformed_ptr_);};
+    void save_transformed_kinect_snapshot(string filename) { pcl::io::savePCDFileASCII (filename, *pclTransformed_ptr_);};
     void get_transformed_selected_points(pcl::PointCloud<pcl::PointXYZ> & outputCloud );
     void get_copy_selected_points(pcl::PointCloud<pcl::PointXYZ>::Ptr &outputCloud );
     
@@ -136,7 +136,6 @@ public:
     void get_selected_points(pcl::PointCloud<pcl::PointXYZ>::Ptr &outputCloudPtr );
     void get_selected_points(pcl::PointCloud<pcl::PointXYZ> &outputCloud);
 
-    void example_pcl_operation();
     //operate on transformed Kinect data and identify point indices within +/-z_eps of specified height
     void filter_cloud_z(PointCloud<pcl::PointXYZ>::Ptr inputCloud, double z_nom, double z_eps, vector<int> &indices);
     void filter_cloud_z(PointCloud<pcl::PointXYZRGB>::Ptr inputCloud, double z_nom, double z_eps, vector<int> &indices);    

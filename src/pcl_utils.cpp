@@ -440,7 +440,7 @@ void PclUtils::get_selected_points(pcl::PointCloud<pcl::PointXYZ> &outputCloud) 
     cout << "copying cloud w/ npts =" << npts << endl;
     outputCloud.points.resize(npts);
     for (int i = 0; i < npts; ++i) {
-        outputCloud.points[i].getVector3fMap() = pclSelectedPoints_ptr_->points[i].getVector3fMap();   
+        outputCloud.points[i].getVector3fMap() = pclSelectedPoints_ptr_->points[i].getVector3fMap();
     }    
     
 }
@@ -448,21 +448,6 @@ void PclUtils::get_selected_points(pcl::PointCloud<pcl::PointXYZ> &outputCloud) 
 //void PclUtils::get_indices(vector<int> &indices,) {
 //    indices = indicies_;
 //}
-
-//here is an example utility function.  It operates on clouds that are member variables, and it puts its result
-// in the general-purpose cloud variable, which can be acquired by main(), if desired, using get_gen_purpose_cloud()
-
-// The operation illustrated here is not all that useful.  It uses transformed, selected points,
-// elevates the data by 5cm, and copies the result to the general-purpose cloud variable
-void PclUtils::example_pcl_operation() {
-    int npts = pclTransformedSelectedPoints_ptr_->points.size(); //number of points
-    copy_cloud(pclTransformedSelectedPoints_ptr_,pclGenPurposeCloud_ptr_); //now have a copy of the selected points in gen-purpose object
-    Eigen::Vector3f offset;
-    offset<<0,0,0.05;
-    for (int i = 0; i < npts; ++i) {
-        pclGenPurposeCloud_ptr_->points[i].getVector3fMap() = pclGenPurposeCloud_ptr_->points[i].getVector3fMap()+offset;   
-    }    
-} 
 
 //This fnc populates and output cloud of type XYZRGB extracted from the full Kinect cloud (in Kinect frame)
 // provide a vector of indices and a holder for the output cloud, which gets populated
@@ -807,7 +792,7 @@ void PclUtils::kinectCB(const sensor_msgs::PointCloud2ConstPtr& cloud) {
         //check some colors:
    int npts_clr = pclKinect_clr_ptr_->points.size();
     cout<<"Kinect color pts size = "<<npts_clr<<endl;
-    avg_color_ = find_avg_color();
+    //avg_color_ = find_avg_color();
     /*
      for (size_t i = 0; i < pclKinect_clr_ptr_->points.size (); ++i)
      std::cout << " " << (int) pclKinect_clr_ptr_->points[i].r
@@ -837,13 +822,13 @@ void PclUtils::selectCB(const sensor_msgs::PointCloud2ConstPtr& cloud) {
     ROS_INFO("RECEIVED NEW PATCH w/  %d * %d points", pclSelectedPoints_ptr_->width, pclSelectedPoints_ptr_->height);
     //ROS_INFO("frame_id = %s",pclSelectedPoints_ptr_->header.frame_id);
     std::cout<<"frame_id ="<<pclSelectedPoints_ptr_->header.frame_id<<endl;
-    Eigen::Vector3f plane_normal;
-    double plane_dist;
-    fit_points_to_plane(pclSelectedPoints_ptr_, plane_normal, plane_dist);
-    ROS_INFO("plane dist = %f",plane_dist);
-    ROS_INFO("plane normal = (%f, %f, %f)",plane_normal(0),plane_normal(1),plane_normal(2));
-    patch_normal_ = plane_normal;
-    patch_dist_ = plane_dist;
+    //Eigen::Vector3f plane_normal;
+    //double plane_dist;
+    //fit_points_to_plane(pclSelectedPoints_ptr_, plane_normal, plane_dist);
+    //ROS_INFO("plane dist = %f",plane_dist);
+    //ROS_INFO("plane normal = (%f, %f, %f)",plane_normal(0),plane_normal(1),plane_normal(2));
+    //patch_normal_ = plane_normal;
+    //patch_dist_ = plane_dist;
  
     /*
     ROS_INFO("Color version has  %d * %d points", pclSelectedPtsClr_ptr_->width, pclSelectedPtsClr_ptr_->height);
@@ -855,7 +840,7 @@ void PclUtils::selectCB(const sensor_msgs::PointCloud2ConstPtr& cloud) {
               << " "    << (int) pclSelectedPtsClr_ptr_->points[i].b << std::endl;
     }
      * */
-    ROS_INFO("done w/ selected-points callback");
+    //ROS_INFO("done w/ selected-points callback");
 
     got_selected_points_ = true;
 }

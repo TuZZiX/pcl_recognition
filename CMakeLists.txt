@@ -41,6 +41,9 @@ cs_add_executable (cluster_extraction src/cluster_extraction.cpp)
 cs_add_executable (find_stool_coke src/find_plane_pcd_file.cpp)
 #cs_add_executable (remove_outliers src/remove_outliers.cpp)
 cs_add_executable (implicit_shape_model src/implicit_shape_model.cpp)
+cs_add_executable (icp src/ICP.cpp)
+cs_add_executable (global_hypothesis_verification src/global_hypothesis_verification.cpp)
+cs_add_executable (pcd_edit_tool src/pcd_edit_tool.cpp)
 
 #the following is required, if desire to link a node in this package with a library created in this same package
 # edit the arguments to reference the named node and named library within this package
@@ -50,6 +53,9 @@ target_link_libraries (cluster_extraction ${PCL_LIBRARIES})
 target_link_libraries (find_stool_coke pcl_lib ${PCL_LIBRARIES})
 #target_link_libraries (remove_outliers ${PCL_LIBRARIES})
 target_link_libraries (implicit_shape_model ${PCL_LIBRARIES})
+target_link_libraries (icp pcl_lib ${PCL_LIBRARIES})
+target_link_libraries (global_hypothesis_verification ${PCL_LIBRARIES})
+target_link_libraries (pcd_edit_tool pcl_lib ${PCL_LIBRARIES})
 
 cs_install()
 cs_export()
