@@ -45,7 +45,7 @@ int main(int argc, char** argv) {
     utils.get_kinect_points(pclKinect_clr_ptr);
     display_kinect = true;
     ros::spinOnce();
-    ROS_INFO("Please select point in /camera/depth_registered/points topic");
+    ROS_INFO("Please select point cloud in \'/camera/depth_registered/points\' topic using \'Publish Selected points\'");
 
     double x, y, z;
     while (!utils.got_selected_points()) {
@@ -61,6 +61,7 @@ int main(int argc, char** argv) {
             z = pow(pclKinect_clr_ptr->points[j].z - pclSelected_ptr->points[i].z, 2);
             if (sqrt(x + y +z ) < DISTANCE_TOLERANCE) {
                 pclEditing_ptr->points.push_back(pclKinect_clr_ptr->points[j]);
+                break;
             }
         }
     }
@@ -71,10 +72,10 @@ int main(int argc, char** argv) {
 
     string input;
     while (ros::ok()) {
-        cout<<"+ to add points to cloud, - to delete cloud, r to reset cloud: ";
+        cout<<"+ to add points to cloud, - to delete cloud, r to reset cloud, q to exit: ";
         cin >> input;
-        ROS_INFO("Please select point in /editing_cloud topic");
         if (input.compare("+") == 0) {
+        	ROS_INFO("Please select point cloud in \'/camera/depth_registered/points\' topic using \'Publish Selected points\'");
             while (!utils.got_selected_points()) {
                 ros::spinOnce();
                 ros::Duration(0.1).sleep();
@@ -89,6 +90,7 @@ int main(int argc, char** argv) {
                     z = pow(pclKinect_clr_ptr->points[j].z - pclSelected_ptr->points[i].z, 2);
                     if (x + y +z < DISTANCE_TOLERANCE) {
                         temp_ptr->points.push_back(pclKinect_clr_ptr->points[j]);
+                        break;
                     }
                 }
             }
@@ -100,6 +102,7 @@ int main(int argc, char** argv) {
                     z = pow(pclEditing_ptr->points[j].z - temp_ptr->points[i].z, 2);
                     if (x + y +z < DISTANCE_TOLERANCE) {
                         in_cloud = true;
+                        break;
                     }
                 }
                 if (!in_cloud) {
@@ -110,6 +113,7 @@ int main(int argc, char** argv) {
             ROS_INFO("snapshot with points %d; saving to file %s", (int)pclEditing_ptr->points.size(), argv[1]);
             pcl::io::savePCDFile(argv[1], *pclEditing_ptr, true);
         } else if (input.compare("-") == 0) {
+        	ROS_INFO("Please select point cloud in \'/editing_cloud\' topic using \'Publish Selected points\'");
             while (!utils.got_selected_points()) {
                 ros::spinOnce();
                 ros::Duration(0.1).sleep();
@@ -125,6 +129,7 @@ int main(int argc, char** argv) {
                     z = pow(pclEditing_ptr->points[i].z - pclSelected_ptr->points[j].z, 2);
                     if (x + y + z < DISTANCE_TOLERANCE) {
                         in_cloud = true;
+                        break;
                     }
                 }
                 if (!in_cloud) {
@@ -137,6 +142,7 @@ int main(int argc, char** argv) {
             pcl::io::savePCDFile(argv[1], *pclEditing_ptr, true);
         } else if (input.compare("r") == 0 || input.compare("R") == 0) {
             ROS_INFO("waiting for kinect data...");
+            
             utils.reset_got_kinect_cloud();
             while (!utils.got_kinect_cloud()) {
                 ros::spinOnce();
@@ -147,7 +153,7 @@ int main(int argc, char** argv) {
             ros::spinOnce();
 
             //pcl::copyPointCloud(*pclKinect_clr_ptr, *pclEditing_ptr);
-            ROS_INFO("Please select point in /camera/depth_registered/points topic");
+            ROS_INFO("Please select point cloud in \'/camera/depth_registered/points\' topic using \'Publish Selected points\'");
             while (!utils.got_selected_points()) {
                 ros::spinOnce();
                 ros::Duration(0.1).sleep();
@@ -162,6 +168,7 @@ int main(int argc, char** argv) {
                     z = pow(pclKinect_clr_ptr->points[j].z - pclSelected_ptr->points[i].z, 2);
                     if (sqrt(x + y +z ) < DISTANCE_TOLERANCE) {
                         pclEditing_ptr->points.push_back(pclKinect_clr_ptr->points[j]);
+                        break;
                     }
                 }
             }
@@ -169,14 +176,12 @@ int main(int argc, char** argv) {
             pcl::io::savePCDFile(argv[1], *pclEditing_ptr, true);
             display_kinect = false;
             ros::spinOnce();
+        } else if (input.compare("q") == 0 || input.compare("Q") == 0) {
+            ROS_INFO("Quiting...");
+            ros::spinOnce();
+            return 0;   
         }
         ros::spinOnce();
-
     }
-
-
-
-
-
     return 0;
 }
