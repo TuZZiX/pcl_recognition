@@ -30,6 +30,9 @@ public:
     void set_cg_size(double cg_size) {cg_size_ = cg_size;}
     void set_cg_thresh(double cg_thresh) {cg_thresh_ = cg_thresh;}
 
+    void load_coke1_parameters();
+    void load_coke2_parameters();
+
     bool recognize(std::vector<Eigen::Matrix3f> rotation, std::vector<Eigen::Vector3f> translation, std::vector<pcl::Correspondences> correspondences);
     bool find_best(Eigen::Matrix3f rotation, Eigen::Vector3f translation);
 

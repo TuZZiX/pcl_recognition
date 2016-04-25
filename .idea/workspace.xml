@@ -77,11 +77,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1d868a31-aa90-407f-90f3-a09f68c4cc83" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/include/pcl_recognition/object_recognizer.h" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/object_recognizer.cpp" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/pcl_recognition.iml" afterPath="$PROJECT_DIR$/.idea/pcl_recognition.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/CMakeLists.txt" afterPath="$PROJECT_DIR$/CMakeLists.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/include/pcl_recognition/object_recognizer.h" afterPath="$PROJECT_DIR$/include/pcl_recognition/object_recognizer.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/object_recognizer.cpp" afterPath="$PROJECT_DIR$/src/object_recognizer.cpp" />
     </list>
     <ignored path="pcl_recognition.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -137,8 +134,8 @@
       <file leaf-file-name="object_recognizer.cpp" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/object_recognizer.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.5462185">
-              <caret line="177" column="90" selection-start-line="177" selection-start-column="90" selection-end-line="177" selection-end-column="90" />
+            <state vertical-scroll-proportion="0.5672269">
+              <caret line="57" column="22" selection-start-line="57" selection-start-column="22" selection-end-line="57" selection-end-column="22" />
               <folding />
             </state>
           </provider>
@@ -148,7 +145,7 @@
         <entry file="file://$PROJECT_DIR$/include/pcl_recognition/object_recognizer.h">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="26" column="62" selection-start-line="26" selection-start-column="62" selection-end-line="26" selection-end-column="62" />
+              <caret line="32" column="4" selection-start-line="32" selection-start-column="4" selection-end-line="32" selection-end-column="33" />
               <folding />
             </state>
           </provider>
@@ -1120,14 +1117,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/include/pcl_recognition/object_recognizer.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="26" column="62" selection-start-line="26" selection-start-column="62" selection-end-line="26" selection-end-column="62" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/correspondence_grouping.cpp">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -1138,10 +1127,18 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/include/pcl_recognition/object_recognizer.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="32" column="4" selection-start-line="32" selection-start-column="4" selection-end-line="32" selection-end-column="33" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/object_recognizer.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.5462185">
-          <caret line="177" column="90" selection-start-line="177" selection-start-column="90" selection-end-line="177" selection-end-column="90" />
+        <state vertical-scroll-proportion="0.5672269">
+          <caret line="57" column="22" selection-start-line="57" selection-start-column="22" selection-end-line="57" selection-end-column="22" />
           <folding />
         </state>
       </provider>
