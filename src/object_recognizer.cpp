@@ -45,21 +45,23 @@ void object_recognizer::use_kinect_scene() {
 }
 
 void object_recognizer::load_coke1_parameters() {
-    model_ss_ =  0.01f;
-    scene_ss_ = 0.03f;
+    model_ss_ =  0.01;
+    scene_ss_ = 0.01;
     rf_rad_ = 0.015f;
     descr_rad_ = 0.02f;
-    cg_size_ = 0.01f;
-    cg_thresh_ = 5.0f;
+    cg_size_ = 0.09;
+    cg_thresh_ = 2.9;
+
+
 }
 
 void object_recognizer::load_coke2_parameters() {
-    model_ss_ =  0.01f;
-    scene_ss_ = 0.03f;
+    model_ss_ =  0.02;
+    scene_ss_ = 0.02;
     rf_rad_ = 0.015f;
     descr_rad_ = 0.02f;
-    cg_size_ = 0.01f;
-    cg_thresh_ = 5.0f;
+    cg_size_ = 0.013;
+    cg_thresh_ = 2;
 }
 
 bool object_recognizer::recognize(std::vector<Eigen::Matrix3f> rotation, std::vector<Eigen::Vector3f> translation,
