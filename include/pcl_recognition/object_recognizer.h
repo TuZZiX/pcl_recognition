@@ -7,15 +7,18 @@
 
 #include <pcl_recognition/pcl_recognition.h>
 
-typedef pcl::PointXYZRGBA PointType;
+typedef pcl::PointXYZRGB PointType;
 typedef pcl::Normal NormalType;
 typedef pcl::ReferenceFrame RFType;
 typedef pcl::SHOT352 DescriptorType;
 
 class object_recognizer {
 public:
+
+    bool show_correspondences;
+    bool show_keypoints;
+
     object_recognizer(ros::NodeHandle& nodehandle);
-    ~object_recognizer();
 
     void set_model_cloud(pcl::PointCloud<PointType>::Ptr in_cloud) { pcl::copyPointCloud(*in_cloud, *model); have_model = true;}
     bool set_model_cloud(std::string filename);
@@ -30,14 +33,11 @@ public:
     void set_cg_size(double cg_size) {cg_size_ = cg_size;}
     void set_cg_thresh(double cg_thresh) {cg_thresh_ = cg_thresh;}
 
-    void load_coke1_parameters();
-    void load_coke2_parameters();
+    bool recognize(std::vector<Eigen::Matrix3f> &rotation, std::vector<Eigen::Vector3f> &translation, std::vector<pcl::Correspondences> &correspondences);
+    bool recognize(std::vector<Eigen::Matrix3f> &rotation, std::vector<Eigen::Vector3f> &translation);
+    bool find_best(Eigen::Matrix3f &rotation, Eigen::Vector3f &translation);
 
-    bool recognize(std::vector<Eigen::Matrix3f> rotation, std::vector<Eigen::Vector3f> translation, std::vector<pcl::Correspondences> correspondences);
-    bool find_best(Eigen::Matrix3f rotation, Eigen::Vector3f translation);
-
-    void visualize_correspondences (pcl::PointCloud<PointType>::Ptr in_cloud, pcl::PointCloud<PointType>::Ptr out_cloud);
-    void visualize_keypoints (pcl::PointCloud<PointType>::Ptr in_cloud, pcl::PointCloud<PointType>::Ptr out_cloud);
+    void pcl_visualize();
 
 private:
     ros::NodeHandle nh_;
@@ -51,6 +51,29 @@ private:
     pcl::PointCloud<DescriptorType>::Ptr model_descriptors;
     pcl::PointCloud<DescriptorType>::Ptr scene_descriptors;
 
+    pcl::PointCloud<PointType>::Ptr pclKinect_ptr_;
+    pcl::PointCloud<PointType>::Ptr rotated_model;
+
+    std::vector<pcl::Correspondences> correspondences;
+    std::vector<Eigen::Matrix4f, Eigen::aligned_allocator<Eigen::Matrix4f>> rototranslations;
+
+    ros::Timer timer;
+
+    ros::Publisher scene_publisher_;
+    ros::Publisher model_publisher_;
+    ros::Publisher scene_keypoints_publisher_;
+    ros::Publisher model_keypoints_publisher_;
+    ros::Publisher rotated_model_publisher_;
+
+    ros::Subscriber pointcloud_subscriber_;
+    ros::Subscriber real_kinect_subscriber_;
+
+    sensor_msgs::PointCloud2 scene_cloud;
+    sensor_msgs::PointCloud2 model_cloud;
+    sensor_msgs::PointCloud2 scene_keypoints_cloud;
+    sensor_msgs::PointCloud2 model_keypoints_cloud;
+    sensor_msgs::PointCloud2 rotated_model_cloud;
+
     double model_ss_;
     double scene_ss_;
     double rf_rad_;
@@ -60,6 +83,15 @@ private:
 
     bool have_model;
     bool have_scene;
+
+    bool got_kinect_cloud_;
+
+    void kinectCB(const sensor_msgs::PointCloud2ConstPtr& cloud);
+    void timerCB(const ros::TimerEvent&);
+
+    void initialize_publishers();
+    void initialize_subscribers();
+    
 };
 
 
