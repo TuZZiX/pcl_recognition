@@ -2,15 +2,17 @@
 <module type="CPP_MODULE" version="4">
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$">
-      <sourceFolder url="file://$MODULE_DIR$/src/pcd_edit_tool.cpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/global_hypothesis_verification.cpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/cluster_extraction.cpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/ICP.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/pcl_utils.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/cluster_extraction.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/global_hypothesis_verification.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/pcd_edit_tool.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/ICP.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/correspondence_grouping.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/object_recognition_kitchen.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/object_recognizer.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/implicit_shape_model.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/find_plane_pcd_file.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/object_recognize_main.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/CMakeLists.txt" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/package.xml" isTestSource="false" />
     </content>

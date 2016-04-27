@@ -45,6 +45,7 @@ cs_add_executable (icp src/ICP.cpp)
 cs_add_executable (global_hypothesis_verification src/global_hypothesis_verification.cpp)
 cs_add_executable (pcd_edit_tool src/pcd_edit_tool.cpp)
 cs_add_executable (object_recognize_main src/object_recognize_main.cpp)
+cs_add_executable (object_recognition_kitchen src/object_recognition_kitchen.cpp)
 
 #the following is required, if desire to link a node in this package with a library created in this same package
 # edit the arguments to reference the named node and named library within this package

@@ -50,7 +50,17 @@ int main(int argc, char** argv) {
     Eigen::Matrix3f rotation;
     Eigen::Vector3f translation;
 
-    load_coke1_parameters(object);
+    if (argc >= 2)
+    {
+    	if (string(argv[1]).compare("1") == 0)
+    	{
+    		load_coke1_parameters(object);
+    	} else {
+    		load_coke2_parameters(object);
+    	}
+    } else {
+    	load_coke1_parameters(object);
+    }
 
     if (!object.set_model_cloud(find_in_package(test_model)))
     {

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<launch>
+	<node name="object_recognize_main" pkg="pcl_recognition" type="object_recognize_main" args="2" output="screen"/>
+	<!-- launch rviz using a specific config file -->
+	<node pkg="rviz" type="rviz" name="rviz" args="-d $(find pcl_recognition)/launch/object_recognizer_coke1.rviz"/>
+</launch>
