@@ -59,7 +59,8 @@ int main(int argc, char** argv) {
     		load_coke2_parameters(object);
     	}
     } else {
-    	load_coke1_parameters(object);
+        test_model = "milk.pcd";
+        test_scene = "milk_cartoon_all_small_clorox.pcd";
     }
 
     if (!object.set_model_cloud(find_in_package(test_model)))

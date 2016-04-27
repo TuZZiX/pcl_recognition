@@ -2,75 +2,75 @@
 <project version="4">
   <component name="CMakeRunConfigurationManager" shouldGenerate="true" assignedExecutableTargets="true" buildAllGenerated="true">
     <generated>
-      <config projectName="pcl_recognition" targetName="recognition_test" />
       <config projectName="pcl_recognition" targetName="object_recognition_kitchen" />
-      <config projectName="pcl_recognition" targetName="tf_generate_messages_py" />
-      <config projectName="pcl_recognition" targetName="actionlib_msgs_generate_messages_lisp" />
+      <config projectName="pcl_recognition" targetName="roscpp_generate_messages_py" />
+      <config projectName="pcl_recognition" targetName="roscpp_generate_messages_cpp" />
       <config projectName="pcl_recognition" targetName="topic_tools_generate_messages_py" />
       <config projectName="pcl_recognition" targetName="nodelet_generate_messages_py" />
       <config projectName="pcl_recognition" targetName="tests" />
       <config projectName="pcl_recognition" targetName="tf2_msgs_generate_messages_cpp" />
       <config projectName="pcl_recognition" targetName="pcl_msgs_generate_messages_cpp" />
-      <config projectName="pcl_recognition" targetName="rosgraph_msgs_generate_messages_lisp" />
-      <config projectName="pcl_recognition" targetName="gtest" />
+      <config projectName="pcl_recognition" targetName="dynamic_reconfigure_generate_messages_cpp" />
+      <config projectName="pcl_recognition" targetName="pcl_ros_gencfg" />
       <config projectName="pcl_recognition" targetName="doxygen" />
       <config projectName="pcl_recognition" targetName="cluster_extraction" />
-      <config projectName="pcl_recognition" targetName="pcd_edit_tool" />
+      <config projectName="pcl_recognition" targetName="bond_generate_messages_cpp" />
       <config projectName="pcl_recognition" targetName="roscpp_generate_messages_lisp" />
-      <config projectName="pcl_recognition" targetName="clean_test_results" />
       <config projectName="pcl_recognition" targetName="tf_generate_messages_cpp" />
       <config projectName="pcl_recognition" targetName="actionlib_generate_messages_lisp" />
+      <config projectName="pcl_recognition" targetName="actionlib_generate_messages_py" />
       <config projectName="pcl_recognition" targetName="actionlib_msgs_generate_messages_py" />
-      <config projectName="pcl_recognition" targetName="dynamic_reconfigure_generate_messages_lisp" />
+      <config projectName="pcl_recognition" targetName="actionlib_msgs_generate_messages_lisp" />
       <config projectName="pcl_recognition" targetName="topic_tools_generate_messages_cpp" />
       <config projectName="pcl_recognition" targetName="gtest_main" />
-      <config projectName="pcl_recognition" targetName="std_msgs_generate_messages_py" />
-      <config projectName="pcl_recognition" targetName="std_msgs_generate_messages_cpp" />
+      <config projectName="pcl_recognition" targetName="rosgraph_msgs_generate_messages_lisp" />
+      <config projectName="pcl_recognition" targetName="dynamic_reconfigure_generate_messages_py" />
       <config projectName="pcl_recognition" targetName="tf2_msgs_generate_messages_lisp" />
       <config projectName="pcl_recognition" targetName="pcl_recognition" />
       <config projectName="pcl_recognition" targetName="tf2_msgs_generate_messages_py" />
-      <config projectName="pcl_recognition" targetName="rosgraph_msgs_generate_messages_cpp" />
-      <config projectName="pcl_recognition" targetName="geometry_msgs_generate_messages_lisp" />
+      <config projectName="pcl_recognition" targetName="std_msgs_generate_messages_cpp" />
+      <config projectName="pcl_recognition" targetName="dynamic_reconfigure_generate_messages_lisp" />
       <config projectName="pcl_recognition" targetName="bond_generate_messages_py" />
-      <config projectName="pcl_recognition" targetName="sensor_msgs_generate_messages_lisp" />
+      <config projectName="pcl_recognition" targetName="tf_generate_messages_py" />
       <config projectName="pcl_recognition" targetName="download_extra_data" />
-      <config projectName="pcl_recognition" targetName="pcl_lib" />
+      <config projectName="pcl_recognition" targetName="clean_test_results" />
       <config projectName="pcl_recognition" targetName="nodelet_generate_messages_lisp" />
       <config projectName="pcl_recognition" targetName="sensor_msgs_generate_messages_py" />
       <config projectName="pcl_recognition" targetName="object_recognizer" />
       <config projectName="pcl_recognition" targetName="correspondence_grouping" />
-      <config projectName="pcl_recognition" targetName="roscpp_generate_messages_cpp" />
+      <config projectName="pcl_recognition" targetName="pcl_lib" />
       <config projectName="pcl_recognition" targetName="topic_tools_generate_messages_lisp" />
-      <config projectName="pcl_recognition" targetName="sensor_msgs_generate_messages_cpp" />
-      <config projectName="pcl_recognition" targetName="actionlib_generate_messages_py" />
+      <config projectName="pcl_recognition" targetName="pcd_edit_tool" />
+      <config projectName="pcl_recognition" targetName="std_msgs_generate_messages_lisp" />
       <config projectName="pcl_recognition" targetName="nodelet_generate_messages_cpp" />
-      <config projectName="pcl_recognition" targetName="global_hypothesis_verification" />
-      <config projectName="pcl_recognition" targetName="clean_test_results_pcl_recognition" />
+      <config projectName="pcl_recognition" targetName="pcl_msgs_generate_messages_lisp" />
+      <config projectName="pcl_recognition" targetName="recognition_test" />
+      <config projectName="pcl_recognition" targetName="rosgraph_msgs_generate_messages_py" />
       <config projectName="pcl_recognition" targetName="pcl_msgs_generate_messages_py" />
       <config projectName="pcl_recognition" targetName="actionlib_generate_messages_cpp" />
       <config projectName="pcl_recognition" targetName="pcl_recognition_package" />
       <config projectName="pcl_recognition" targetName="object_recognize_main" />
       <config projectName="pcl_recognition" targetName="pcl_basic" />
-      <config projectName="pcl_recognition" targetName="dynamic_reconfigure_generate_messages_py" />
-      <config projectName="pcl_recognition" targetName="pcl_msgs_generate_messages_lisp" />
+      <config projectName="pcl_recognition" targetName="std_msgs_generate_messages_py" />
+      <config projectName="pcl_recognition" targetName="global_hypothesis_verification" />
       <config projectName="pcl_recognition" targetName="tf_generate_messages_lisp" />
       <config projectName="pcl_recognition" targetName="find_stool_coke" />
       <config projectName="pcl_recognition" targetName="geometry_msgs_generate_messages_cpp" />
       <config projectName="pcl_recognition" targetName="_catkin_empty_exported_target" />
-      <config projectName="pcl_recognition" targetName="geometry_msgs_generate_messages_py" />
+      <config projectName="pcl_recognition" targetName="sensor_msgs_generate_messages_cpp" />
       <config projectName="pcl_recognition" targetName="run_tests" />
       <config projectName="pcl_recognition" targetName="icp" />
-      <config projectName="pcl_recognition" targetName="rosgraph_msgs_generate_messages_py" />
-      <config projectName="pcl_recognition" targetName="roscpp_generate_messages_py" />
-      <config projectName="pcl_recognition" targetName="dynamic_reconfigure_gencfg" />
       <config projectName="pcl_recognition" targetName="bond_generate_messages_lisp" />
+      <config projectName="pcl_recognition" targetName="dynamic_reconfigure_gencfg" />
+      <config projectName="pcl_recognition" targetName="geometry_msgs_generate_messages_py" />
       <config projectName="pcl_recognition" targetName="actionlib_msgs_generate_messages_cpp" />
-      <config projectName="pcl_recognition" targetName="bond_generate_messages_cpp" />
       <config projectName="pcl_recognition" targetName="find_stool" />
-      <config projectName="pcl_recognition" targetName="std_msgs_generate_messages_lisp" />
+      <config projectName="pcl_recognition" targetName="clean_test_results_pcl_recognition" />
+      <config projectName="pcl_recognition" targetName="geometry_msgs_generate_messages_lisp" />
+      <config projectName="pcl_recognition" targetName="rosgraph_msgs_generate_messages_cpp" />
+      <config projectName="pcl_recognition" targetName="gtest" />
       <config projectName="pcl_recognition" targetName="implicit_shape_model" />
-      <config projectName="pcl_recognition" targetName="pcl_ros_gencfg" />
-      <config projectName="pcl_recognition" targetName="dynamic_reconfigure_generate_messages_cpp" />
+      <config projectName="pcl_recognition" targetName="sensor_msgs_generate_messages_lisp" />
     </generated>
   </component>
   <component name="CMakeSettings" AUTO_RELOAD="true" GENERATION_PASS_SYSTEM_ENVIRONMENT="true">
@@ -80,12 +80,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1d868a31-aa90-407f-90f3-a09f68c4cc83" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/.name" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/launch/object_recognizer.rviz" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/cluster_extraction.cpp" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/global_hypothesis_verification_ply.cpp" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/remove_outliers.cpp" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/pcl_recognition.iml" afterPath="$PROJECT_DIR$/.idea/pcl_recognition.iml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/CMakeLists.txt" afterPath="$PROJECT_DIR$/CMakeLists.txt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ism_command.sh" afterPath="$PROJECT_DIR$/ism_command.sh" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/object_recognize_main.cpp" afterPath="$PROJECT_DIR$/src/object_recognize_main.cpp" />
     </list>
     <ignored path="pcl_recognition.iws" />
@@ -139,24 +139,24 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="object_recognizer.cpp" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/object_recognizer.cpp">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="45" column="85" selection-start-line="45" selection-start-column="85" selection-end-line="45" selection-end-column="85" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="object_recognition_kitchen.cpp" pinned="false" current-in-tab="true">
+      <file leaf-file-name="object_recognition_kitchen.cpp" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/object_recognition_kitchen.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.6407563">
+            <state vertical-scroll-proportion="0.0">
               <caret line="79" column="1" selection-start-line="79" selection-start-column="1" selection-end-line="79" selection-end-column="1" />
               <folding>
                 <element signature="e#40#84#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="object_recognize_main.cpp" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/object_recognize_main.cpp">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.3970588">
+              <caret line="52" column="18" selection-start-line="52" selection-start-column="18" selection-end-line="52" selection-end-column="18" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -175,7 +175,7 @@
         <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="46" column="71" selection-start-line="46" selection-start-column="71" selection-end-line="46" selection-end-column="71" />
+              <caret line="42" column="71" selection-start-line="42" selection-start-column="71" selection-end-line="42" selection-end-column="71" />
               <folding />
             </state>
           </provider>
@@ -233,6 +233,7 @@
         <option value="$PROJECT_DIR$/src/object_recognizer.cpp" />
         <option value="$PROJECT_DIR$/CMakeLists.txt" />
         <option value="$PROJECT_DIR$/src/object_recognition_kitchen.cpp" />
+        <option value="$PROJECT_DIR$/src/object_recognize_main.cpp" />
       </list>
     </option>
   </component>
@@ -243,7 +244,7 @@
   </component>
   <component name="OCFindUsagesOptions" text="true" ivars="false" properties="true" derivedClasses="false" />
   <component name="ProjectFrameBounds">
-    <option name="x" value="65" />
+    <option name="x" value="1985" />
     <option name="y" value="24" />
     <option name="width" value="1855" />
     <option name="height" value="1056" />
@@ -772,7 +773,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="65" y="24" width="1855" height="1056" extended-state="6" />
+    <frame x="1985" y="24" width="1855" height="1056" extended-state="7" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24905661" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -1062,13 +1063,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/cluster_extraction.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="25" column="53" selection-start-line="25" selection-start-column="53" selection-end-line="25" selection-end-column="53" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/global_hypothesis_verification.cpp">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="1.2100841">
@@ -1148,7 +1142,7 @@
     <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="46" column="71" selection-start-line="46" selection-start-column="71" selection-end-line="46" selection-end-column="71" />
+          <caret line="42" column="71" selection-start-line="42" selection-start-column="71" selection-end-line="42" selection-end-column="71" />
           <folding />
         </state>
       </provider>
@@ -1189,11 +1183,19 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/object_recognition_kitchen.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.6407563">
+        <state vertical-scroll-proportion="0.0">
           <caret line="79" column="1" selection-start-line="79" selection-start-column="1" selection-end-line="79" selection-end-column="1" />
           <folding>
             <element signature="e#40#84#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/object_recognize_main.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.3970588">
+          <caret line="52" column="18" selection-start-line="52" selection-start-column="18" selection-end-line="52" selection-end-column="18" />
+          <folding />
         </state>
       </provider>
     </entry>
