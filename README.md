@@ -44,11 +44,11 @@ This packages contains multi approaches from PCL to recognize objects in a Kinec
 
 For test 1:
 
-`rosrun pcl_recognition recognition_test coke_bad.pcd coke_scene.pcd -k -c --model_ss 0.01 --scene_ss 0.01 --cg_thresh 2.9 --cg_size 0.09 `
+`rosrun pcl_recognition correspondence_grouping coke_bad.pcd coke_scene.pcd -k -c --model_ss 0.01 --scene_ss 0.01 --cg_thresh 2.9 --cg_size 0.09 `
 
 For test 2:
 
-` rosrun pcl_recognition recognition_test new_coke.pcd coke_2.pcd -k -c --model_ss 0.02 --scene_ss 0.02 --cg_thresh 2 --cg_size 0.13 `
+` rosrun pcl_recognition correspondence_grouping new_coke.pcd coke_2.pcd -k -c --model_ss 0.02 --scene_ss 0.02 --cg_thresh 2 --cg_size 0.13 `
 
 ### Implicit Shape Model 
 (*http://pointclouds.org/documentation/tutorials/implicit_shape_model.php*)
@@ -64,14 +64,14 @@ For test 2:
 
 ####Run it by
 
-`roscd pcl_recognition\pcd`
+`roscd pcl_recognition/pcd`
 
 `rosrun pcl_recognition global_hypothesis_verification milk.pcd milk_cartoon_all_small_clorox.pcd -k`
 
 ### Iterative Closest Point 
 (*http://pointclouds.org/documentation/tutorials/interactive_icp.php*)
 
-`roscd pcl_recognition\pcd`
+`roscd pcl_recognition/pcd`
 
 `rosrun pcl_recognition icp coke.ply 20`
 
@@ -105,7 +105,7 @@ Usage demonstration: *https://youtu.be/GV69MXoV2kg*
 
 ## Calculate normal, centroid of a plane
 
-Run this by:
+####Run it by
 
 `roslaunch pcl_recognition find_stool_coke.launch`
 
