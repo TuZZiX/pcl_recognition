@@ -20,6 +20,8 @@ public:
 
     object_recognizer(ros::NodeHandle& nodehandle);
 
+    geometry_msgs::Quaternion rotation2quat(Eigen::Matrix3f rotation);
+
     void set_model_cloud(pcl::PointCloud<PointType>::Ptr in_cloud) { pcl::copyPointCloud(*in_cloud, *model); have_model = true;}
     bool set_model_cloud(std::string filename);
     void set_scene_cloud(pcl::PointCloud<PointType>::Ptr in_cloud) { pcl::copyPointCloud(*in_cloud, *scene); have_scene = true;}
@@ -39,7 +41,6 @@ public:
     bool find_best(geometry_msgs::Pose &object_pose);
 
     void pcl_visualize();
-    geometry_msgs::Quaternion rotation2quat(Eigen::Matrix3f rotation);
 
 private:
     ros::NodeHandle nh_;

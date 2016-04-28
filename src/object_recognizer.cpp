@@ -218,6 +218,9 @@ bool object_recognizer::recognize( std::vector<Eigen::Matrix3f> &rotation, std::
         rotation.resize( rototranslations.size() );
         translation.resize( rototranslations.size() );
         std::cout << "Model instances found: " << rototranslations.size () << std::endl;
+        if (rototranslations.size() == 0) {
+            return(false);
+        }
         for ( size_t i = 0; i < rototranslations.size(); ++i )
         {
             std::cout << "\nInstance " << i + 1 << ":" << std::endl;
@@ -231,7 +234,6 @@ bool object_recognizer::recognize( std::vector<Eigen::Matrix3f> &rotation, std::
                 rotated_model->points.push_back(temp_rotated_ptr->points[i]);
             }
         }
-        
     } else {
         ROS_INFO( "Please set model and scene first" );
         return(false);
@@ -263,42 +265,37 @@ bool object_recognizer::recognize( std::vector<Eigen::Matrix3f> &rotation, std::
 
 bool object_recognizer::find_best( Eigen::Matrix3f &rotation, Eigen::Vector3f &translation )
 {
-    if ( have_scene && have_model )
-    {
-        std::vector<Eigen::Matrix3f>    temp_rotation;
-        std::vector<Eigen::Vector3f>    temp_translation;
+    std::vector<Eigen::Matrix3f>    temp_rotation;
+    std::vector<Eigen::Vector3f>    temp_translation;
 
-        int     index       = -1;
-        double  best_norm   = 0.0;
-        double  temp_norm   = 0.0;
+    int     index       = -1;
+    double  best_norm   = 0.0;
+    double  temp_norm   = 0.0;
 
-        if ( recognize( temp_rotation, temp_translation ) )
+    if ( recognize( temp_rotation, temp_translation ) ) {
+        for ( int i = 0; i < correspondences.size(); ++i )
         {
-            for ( int i = 0; i < correspondences.size(); ++i )
+            temp_norm = 0.0;
+            for ( int j = 0; j < correspondences[i].size(); ++j )
             {
-                temp_norm = 0.0;
-                for ( int j = 0; j < correspondences[i].size(); ++j )
-                {
-                    temp_norm += pow( correspondences[i][j].weight, 2 );
-                }
-                temp_norm = sqrt( temp_norm );
-                if ( best_norm <= temp_norm )
-                {
-                    index       = i;
-                    best_norm   = temp_norm;
-                }
+                temp_norm += pow( correspondences[i][j].weight, 2 );
             }
-            if (index >= 0)
+            temp_norm = sqrt( temp_norm );
+            if ( best_norm <= temp_norm )
             {
-                rotation    = temp_rotation[index];
-                translation = temp_translation[index];
+                index       = i;
+                best_norm   = temp_norm;
             }
         }
+        if (index >= 0)
+        {
+            rotation    = temp_rotation[index];
+            translation = temp_translation[index];
+        }
+        return(true);
     } else {
-        ROS_INFO( "Please set model and scene first" );
         return(false);
     }
-    return(true);
 }
 
 bool object_recognizer::find_best( geometry_msgs::Pose &object_pose )
@@ -432,67 +429,66 @@ void object_recognizer::timerCB( const ros::TimerEvent & )
 }
 
 geometry_msgs::Quaternion object_recognizer::rotation2quat(Eigen::Matrix3f rotation) {
+    // Output quaternion
+    geometry_msgs::Quaternion quaternion;
+    float w,x,y,z;
+    // Determine which of w,x,y, or z has the largest absolute value
+    float fourWSquaredMinus1 = rotation(0,0) + rotation(1,1) + rotation(2,2);
+    float fourXSquaredMinus1 = rotation(0,0) - rotation(1,1) - rotation(2,2);
+    float fourYSquaredMinus1 = rotation(1,1) - rotation(0,0) - rotation(2,2);
+    float fourZSquaredMinus1 = rotation(2,2) - rotation(0,0) - rotation(1,1);
 
-            // Output quaternion
-            geometry_msgs::Quaternion quaternion;
-            float w,x,y,z;
-            // Determine which of w,x,y, or z has the largest absolute value
-            float fourWSquaredMinus1 = rotation(0,0) + rotation(1,1) + rotation(2,2);
-            float fourXSquaredMinus1 = rotation(0,0) - rotation(1,1) - rotation(2,2);
-            float fourYSquaredMinus1 = rotation(1,1) - rotation(0,0) - rotation(2,2);
-            float fourZSquaredMinus1 = rotation(2,2) - rotation(0,0) - rotation(1,1);
+    int biggestIndex = 0;
+    float fourBiggestSquaredMinus1 = fourWSquaredMinus1;
 
-            int biggestIndex = 0;
-            float fourBiggestSquaredMinus1 = fourWSquaredMinus1;
+    if(fourXSquaredMinus1 > fourBiggestSquaredMinus1) {
+        fourBiggestSquaredMinus1 = fourXSquaredMinus1;
+        biggestIndex = 1;
+    }
+    if (fourYSquaredMinus1 > fourBiggestSquaredMinus1) {
+        fourBiggestSquaredMinus1 = fourYSquaredMinus1;
+        biggestIndex = 2;
+    }
+    if (fourZSquaredMinus1 > fourBiggestSquaredMinus1) {
+        fourBiggestSquaredMinus1 = fourZSquaredMinus1;
+        biggestIndex = 3;
+    }
+    // Per form square root and division
+    float biggestVal = sqrt (fourBiggestSquaredMinus1 + 1.0f ) * 0.5f;
+    float mult = 0.25f / biggestVal;
 
-            if(fourXSquaredMinus1 > fourBiggestSquaredMinus1) {
-                fourBiggestSquaredMinus1 = fourXSquaredMinus1;
-                biggestIndex = 1;
-            }
-            if (fourYSquaredMinus1 > fourBiggestSquaredMinus1) {
-                fourBiggestSquaredMinus1 = fourYSquaredMinus1;
-                biggestIndex = 2;
-            }
-            if (fourZSquaredMinus1 > fourBiggestSquaredMinus1) {
-                fourBiggestSquaredMinus1 = fourZSquaredMinus1;
-                biggestIndex = 3;
-            }
-            // Per form square root and division
-            float biggestVal = sqrt (fourBiggestSquaredMinus1 + 1.0f ) * 0.5f;
-            float mult = 0.25f / biggestVal;
+    // Apply table to compute quaternion values
+    switch (biggestIndex) {
+        case 0:
+            w = biggestVal;
+            x = (rotation(1,2) - rotation(2,1)) * mult;
+            y = (rotation(2,0) - rotation(0,2)) * mult;
+            z = (rotation(0,1) - rotation(1,0)) * mult;
+            break;
+        case 1:
+            x = biggestVal;
+            w = (rotation(1,2) - rotation(2,1)) * mult;
+            y = (rotation(0,1) + rotation(1,0)) * mult;
+            z = (rotation(2,0) + rotation(0,2)) * mult;
+            break;
+        case 2:
+            y = biggestVal;
+            w = (rotation(2,0) - rotation(0,2)) * mult;
+            x = (rotation(0,1) + rotation(1,0)) * mult;
+            z = (rotation(1,2) + rotation(2,1)) * mult;
+            break;
+        case 3:
+            z = biggestVal;
+            w = (rotation(0,1) - rotation(1,0)) * mult;
+            x = (rotation(2,0) + rotation(0,2)) * mult;
+            y = (rotation(1,2) + rotation(2,1)) * mult;
+            break;
+    }
 
-            // Apply table to compute quaternion values
-            switch (biggestIndex) {
-                case 0:
-                    w = biggestVal;
-                    x = (rotation(1,2) - rotation(2,1)) * mult;
-                    y = (rotation(2,0) - rotation(0,2)) * mult;
-                    z = (rotation(0,1) - rotation(1,0)) * mult;
-                    break;
-                case 1:
-                    x = biggestVal;
-                    w = (rotation(1,2) - rotation(2,1)) * mult;
-                    y = (rotation(0,1) + rotation(1,0)) * mult;
-                    z = (rotation(2,0) + rotation(0,2)) * mult;
-                    break;
-                case 2:
-                    y = biggestVal;
-                    w = (rotation(2,0) - rotation(0,2)) * mult;
-                    x = (rotation(0,1) + rotation(1,0)) * mult;
-                    z = (rotation(1,2) + rotation(2,1)) * mult;
-                    break;
-                case 3:
-                    z = biggestVal;
-                    w = (rotation(0,1) - rotation(1,0)) * mult;
-                    x = (rotation(2,0) + rotation(0,2)) * mult;
-                    y = (rotation(1,2) + rotation(2,1)) * mult;
-                    break;
-                }
-                
-                quaternion.x = x;
-                quaternion.y = y;
-                quaternion.z = z;
-                quaternion.w = w;
+    quaternion.x = x;
+    quaternion.y = y;
+    quaternion.z = z;
+    quaternion.w = w;
 
-                return quaternion;
-            } 
+    return quaternion;
+}
