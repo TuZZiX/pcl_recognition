@@ -23,6 +23,10 @@ In **camera** / **driver**, check the box **depth_registration**.
 Since now, the most fast and accurate way to recognize object is using ORK which is a mesh based recognition, see (*http://wg-perception.github.io/object_recognition_core/*).
 
 ####Run it by
+`rosrun object_recognition_core object_add.py -n "coke " -d "A empty coke can" --commit`
+
+``rosrun object_recognition_core mesh_add.py [the object id that previous command returned] `rospack find pcl_recognition`/data/coke.stl``
+
 `roslaunch pcl_recognition ORK.launch`
 
 Video demonstration: *https://youtu.be/lbvA26GHWz0*

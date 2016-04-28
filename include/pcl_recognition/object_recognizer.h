@@ -38,6 +38,7 @@ public:
     bool find_best(Eigen::Matrix3f &rotation, Eigen::Vector3f &translation);
 
     void pcl_visualize();
+    geometry_msgs::Quaternion rotation2quat(Eigen::Matrix3f rotation);
 
 private:
     ros::NodeHandle nh_;

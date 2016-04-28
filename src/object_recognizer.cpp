@@ -416,3 +416,69 @@ void object_recognizer::timerCB( const ros::TimerEvent & )
     }
 
 }
+
+geometry_msgs::Quaternion object_recognizer::rotation2quat(Eigen::Matrix3f rotation) {
+
+            // Output quaternion
+            geometry_msgs::Quaternion quaternion;
+            float w,x,y,z;
+            // Determine which of w,x,y, or z has the largest absolute value
+            float fourWSquaredMinus1 = rotation(0,0) + rotation(1,1) + rotation(2,2);
+            float fourXSquaredMinus1 = rotation(0,0) - rotation(1,1) - rotation(2,2);
+            float fourYSquaredMinus1 = rotation(1,1) - rotation(0,0) - rotation(2,2);
+            float fourZSquaredMinus1 = rotation(2,2) - rotation(0,0) - rotation(1,1);
+
+            int biggestIndex = 0;
+            float fourBiggestSquaredMinus1 = fourWSquaredMinus1;
+
+            if(fourXSquaredMinus1 > fourBiggestSquaredMinus1) {
+                fourBiggestSquaredMinus1 = fourXSquaredMinus1;
+                biggestIndex = 1;
+            }
+            if (fourYSquaredMinus1 > fourBiggestSquaredMinus1) {
+                fourBiggestSquaredMinus1 = fourYSquaredMinus1;
+                biggestIndex = 2;
+            }
+            if (fourZSquaredMinus1 > fourBiggestSquaredMinus1) {
+                fourBiggestSquaredMinus1 = fourZSquaredMinus1;
+                biggestIndex = 3;
+            }
+            // Per form square root and division
+            float biggestVal = sqrt (fourBiggestSquaredMinus1 + 1.0f ) * 0.5f;
+            float mult = 0.25f / biggestVal;
+
+            // Apply table to compute quaternion values
+            switch (biggestIndex) {
+                case 0:
+                    w = biggestVal;
+                    x = (rotation(1,2) - rotation(2,1)) * mult;
+                    y = (rotation(2,0) - rotation(0,2)) * mult;
+                    z = (rotation(0,1) - rotation(1,0)) * mult;
+                    break;
+                case 1:
+                    x = biggestVal;
+                    w = (rotation(1,2) - rotation(2,1)) * mult;
+                    y = (rotation(0,1) + otation(1,0)) * mult;
+                    z = (rotation(2,0) + rotation(0,2)) * mult;
+                    break;
+                case 2:
+                    y = biggestVal;
+                    w = (rotation(2,0) - rotation(0,2)) * mult;
+                    x = (rotation(0,1) + otation(1,0)) * mult;
+                    z = (rotation(1,2) + rotation(2,1)) * mult;
+                    break;
+                case 3:
+                    z = biggestVal;
+                    w = (rotation(0,1) - otation(1,0)) * mult;
+                    x = (rotation(2,0) + rotation(0,2)) * mult;
+                    y = (rotation(1,2) + rotation(2,1)) * mult;
+                    break;
+                }
+                
+                quaternion.x = x;
+                quaternion.y = y;
+                quaternion.z = z;
+                quaternion.w = w;
+
+                return quaternion;
+            } 
