@@ -301,6 +301,20 @@ bool object_recognizer::find_best( Eigen::Matrix3f &rotation, Eigen::Vector3f &t
     return(true);
 }
 
+bool object_recognizer::find_best( geometry_msgs::Pose &object_pose )
+{
+    Eigen::Matrix3f    temp_rotation;
+    Eigen::Vector3f    temp_translation;
+    if (find_best(temp_rotation, temp_translation)) {
+        object_pose.orientation = rotation2quat(temp_rotation);
+        object_pose.position.x = temp_translation[0];
+        object_pose.position.y = temp_translation[1];
+        object_pose.position.z = temp_translation[2];
+    } else {
+        return(false);
+    }
+}
+
 
 void object_recognizer::pcl_visualize()
 {
@@ -458,18 +472,18 @@ geometry_msgs::Quaternion object_recognizer::rotation2quat(Eigen::Matrix3f rotat
                 case 1:
                     x = biggestVal;
                     w = (rotation(1,2) - rotation(2,1)) * mult;
-                    y = (rotation(0,1) + otation(1,0)) * mult;
+                    y = (rotation(0,1) + rotation(1,0)) * mult;
                     z = (rotation(2,0) + rotation(0,2)) * mult;
                     break;
                 case 2:
                     y = biggestVal;
                     w = (rotation(2,0) - rotation(0,2)) * mult;
-                    x = (rotation(0,1) + otation(1,0)) * mult;
+                    x = (rotation(0,1) + rotation(1,0)) * mult;
                     z = (rotation(1,2) + rotation(2,1)) * mult;
                     break;
                 case 3:
                     z = biggestVal;
-                    w = (rotation(0,1) - otation(1,0)) * mult;
+                    w = (rotation(0,1) - rotation(1,0)) * mult;
                     x = (rotation(2,0) + rotation(0,2)) * mult;
                     y = (rotation(1,2) + rotation(2,1)) * mult;
                     break;

@@ -36,6 +36,7 @@ public:
     bool recognize(std::vector<Eigen::Matrix3f> &rotation, std::vector<Eigen::Vector3f> &translation, std::vector<pcl::Correspondences> &correspondences);
     bool recognize(std::vector<Eigen::Matrix3f> &rotation, std::vector<Eigen::Vector3f> &translation);
     bool find_best(Eigen::Matrix3f &rotation, Eigen::Vector3f &translation);
+    bool find_best(geometry_msgs::Pose &object_pose);
 
     void pcl_visualize();
     geometry_msgs::Quaternion rotation2quat(Eigen::Matrix3f rotation);
