@@ -12,13 +12,13 @@ typedef pcl::Normal NormalType;
 typedef pcl::ReferenceFrame RFType;
 typedef pcl::SHOT352 DescriptorType;
 
-class object_recognizer {
+class ObjectRecognizer {
 public:
 
     bool show_correspondences;
     bool show_keypoints;
 
-    object_recognizer(ros::NodeHandle& nodehandle);
+    ObjectRecognizer(ros::NodeHandle& nodehandle);
 
     geometry_msgs::Quaternion rotation2quat(Eigen::Matrix3f rotation);
 

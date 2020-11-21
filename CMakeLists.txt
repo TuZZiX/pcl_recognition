@@ -27,11 +27,11 @@ find_package(Boost REQUIRED COMPONENTS system thread)
 
 # C++0x support - not quite the same as final C++11!
 # use carefully;  can interfere with point-cloud library
-SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
 
 # Libraries: uncomment the following and edit arguments to create a new library
 cs_add_library(pcl_lib src/pcl_utils.cpp)
-cs_add_library(object_recognizer src/object_recognizer.cpp)
+cs_add_library(object_recognizer src/ObjectRecognizer.cpp)
 
 # Executables: uncomment the following and edit arguments to compile new nodes
 # may add more of these lines for more nodes from the same package

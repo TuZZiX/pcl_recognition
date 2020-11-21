@@ -4,7 +4,7 @@
    this is a test main, parameters should be tuned in differnt cases
    */
 
-#include <pcl_recognition/object_recognizer.h>
+#include <pcl_recognition/ObjectRecognizer.h>
 #include <ros/package.h> 
 
 string test_model;
@@ -16,7 +16,7 @@ std::string find_in_package(std::string filename) {
 	string full_path = pkg_path+append+filename;
 	return full_path;
 }
-void load_coke1_parameters(object_recognizer& object)
+void load_coke1_parameters(ObjectRecognizer& object)
 {
     // the paramters for coke_bad and coke_scene
     test_model = "coke_bad.pcd";
@@ -29,7 +29,7 @@ void load_coke1_parameters(object_recognizer& object)
 }
 
 
-void load_coke2_parameters(object_recognizer& object)
+void load_coke2_parameters(ObjectRecognizer& object)
 {
     //the parameter for coke_2 and new_coke
     test_model = "new_coke.pcd";
@@ -41,26 +41,40 @@ void load_coke2_parameters(object_recognizer& object)
     object.set_cg_thresh(45);
 }
 
+void load_milk_parameters(ObjectRecognizer& object)
+{
+    //the parameter for milk from PCL example
+    test_model = "milk.pcd";
+    test_scene = "milk_cartoon_all_small_clorox.pcd";
+
+    object.set_model_ss(0.01);
+    object.set_scene_ss(0.01);
+    object.set_cg_size(0.13);
+    object.set_cg_thresh(45);
+}
+
 int main(int argc, char** argv) {
-    ros::init(argc, argv, "object_recognizer"); //node name
+    ros::init(argc, argv, "ObjectRecognizer"); //node name
     ros::NodeHandle nh;
     
-    object_recognizer object(nh);
+    ObjectRecognizer object(nh);
 
     Eigen::Matrix3f rotation;
     Eigen::Vector3f translation;
 
     if (argc >= 2)
     {
-    	if (string(argv[1]).compare("1") == 0)
-    	{
+    	if (string(argv[1]) == "1") {
     		load_coke1_parameters(object);
-    	} else {
+    	} else if (string(argv[1]) == "2") {
     		load_coke2_parameters(object);
+    	} else {
+            load_milk_parameters(object);
     	}
     } else {
-        test_model = "milk.pcd";
-        test_scene = "milk_cartoon_all_small_clorox.pcd";
+        // use kinect camera
+        load_coke2_parameters(object);
+        test_scene = "";
     }
 
     if (!object.set_model_cloud(find_in_package(test_model)))
@@ -71,8 +85,10 @@ int main(int argc, char** argv) {
 
     if (!object.set_scene_cloud(find_in_package(test_scene)))
     {
-    	ROS_INFO("NO SCENE PCD FILE FOUND!");
-    	return -1;
+    	ROS_INFO("NO SCENE PCD FILE FOUND! USE INPUT FROM KINECT CAMERA INSTEAD");
+        ROS_INFO("Please make sure kinect camera is published to /kinect/depth/points or /camera/depth_registered/points");
+        object.use_kinect_scene();
+        ROS_INFO("Got scene from kinect camera");
     }
 
     ROS_INFO("In rviz, please select fixed frame = \'camera_depth_optical_frame\'");
@@ -87,11 +103,10 @@ int main(int argc, char** argv) {
 	    printf ("            | %6.3f %6.3f %6.3f | \n", rotation (2,0), rotation (2,1), rotation (2,2));
 	    printf ("\n");
 	    printf ("        t = < %0.3f, %0.3f, %0.3f >\n", translation (0), translation (1), translation (2));
+        object.pcl_visualize();
     } else {
     	ROS_INFO("No object found!");
     }
- 
-    object.pcl_visualize();
 
     ros::spin();
 

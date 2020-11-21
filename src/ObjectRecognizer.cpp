@@ -4,15 +4,15 @@
  *
  */
 
-#include <pcl_recognition/object_recognizer.h>
+#include <pcl_recognition/ObjectRecognizer.h>
 
 
-object_recognizer::object_recognizer( ros::NodeHandle &nodehandle ) : nh_( nodehandle ),
-    model( new pcl::PointCloud<PointType> ), model_keypoints( new pcl::PointCloud<PointType> ),
-    scene( new pcl::PointCloud<PointType> ), scene_keypoints( new pcl::PointCloud<PointType> ),
-    model_normals( new pcl::PointCloud<NormalType> ), scene_normals( new pcl::PointCloud<NormalType> ),
-    model_descriptors( new pcl::PointCloud<DescriptorType> ), scene_descriptors( new pcl::PointCloud<DescriptorType> ),
-    pclKinect_ptr_( new pcl::PointCloud<PointType> ), rotated_model( new pcl::PointCloud<PointType> )
+ObjectRecognizer::ObjectRecognizer(ros::NodeHandle &nodehandle ) : nh_(nodehandle ),
+                                                                   model( new pcl::PointCloud<PointType> ), model_keypoints( new pcl::PointCloud<PointType> ),
+                                                                   scene( new pcl::PointCloud<PointType> ), scene_keypoints( new pcl::PointCloud<PointType> ),
+                                                                   model_normals( new pcl::PointCloud<NormalType> ), scene_normals( new pcl::PointCloud<NormalType> ),
+                                                                   model_descriptors( new pcl::PointCloud<DescriptorType> ), scene_descriptors( new pcl::PointCloud<DescriptorType> ),
+                                                                   pclKinect_ptr_( new pcl::PointCloud<PointType> ), rotated_model( new pcl::PointCloud<PointType> )
 {
     model_ss_   = 0.01f;
     scene_ss_   = 0.03f;
@@ -29,19 +29,19 @@ object_recognizer::object_recognizer( ros::NodeHandle &nodehandle ) : nh_( nodeh
     
     initialize_publishers();
     initialize_subscribers();
-    timer = nh_.createTimer(ros::Duration(0.2), &object_recognizer::timerCB, this );
+    timer = nh_.createTimer(ros::Duration(0.2), &ObjectRecognizer::timerCB, this );
 
 }
 
 
-void object_recognizer::initialize_subscribers()
+void ObjectRecognizer::initialize_subscribers()
 {
-    pointcloud_subscriber_  = nh_.subscribe( "/kinect/depth/points", 1, &object_recognizer::kinectCB, this );
-    real_kinect_subscriber_ = nh_.subscribe( "/camera/depth_registered/points", 1, &object_recognizer::kinectCB, this );
+    pointcloud_subscriber_  = nh_.subscribe("/kinect/depth/points", 1, &ObjectRecognizer::kinectCB, this );
+    real_kinect_subscriber_ = nh_.subscribe("/camera/depth_registered/points", 1, &ObjectRecognizer::kinectCB, this );
 }
 
 
-void object_recognizer::initialize_publishers()
+void ObjectRecognizer::initialize_publishers()
 {
     scene_publisher_    = nh_.advertise<sensor_msgs::PointCloud2>( "/scene", 1, true );
     model_publisher_    = nh_.advertise<sensor_msgs::PointCloud2>( "/model", 1, true );
@@ -51,7 +51,7 @@ void object_recognizer::initialize_publishers()
 }
 
 
-bool object_recognizer::set_model_cloud( std::string filename )
+bool ObjectRecognizer::set_model_cloud(std::string filename )
 {
     if ( pcl::io::loadPCDFile<PointType> ( filename, *model ) == -1 ) /* * load the file */
     {
@@ -63,7 +63,7 @@ bool object_recognizer::set_model_cloud( std::string filename )
 }
 
 
-bool object_recognizer::set_scene_cloud( std::string filename )
+bool ObjectRecognizer::set_scene_cloud(std::string filename )
 {
     if ( pcl::io::loadPCDFile<PointType> ( filename, *scene ) == -1 ) /* * load the file */
     {
@@ -75,7 +75,7 @@ bool object_recognizer::set_scene_cloud( std::string filename )
 }
 
 
-void object_recognizer::use_kinect_scene()
+void ObjectRecognizer::use_kinect_scene()
 {
     got_kinect_cloud_ = false;
     while(!got_kinect_cloud_) {
@@ -85,40 +85,35 @@ void object_recognizer::use_kinect_scene()
     have_scene = true;
 }
 
-bool object_recognizer::recognize( std::vector<Eigen::Matrix3f> &rotation, std::vector<Eigen::Vector3f> &translation )
+bool ObjectRecognizer::recognize(std::vector<Eigen::Matrix3f> &rotation, std::vector<Eigen::Vector3f> &translation )
 {
     if ( have_scene && have_model )
     {
+        //
+        //  Compute Normals
+        //
         pcl::NormalEstimationOMP<PointType, NormalType> norm_est;
-        norm_est.setKSearch( 10 );
-        norm_est.setInputCloud( model );
-        norm_est.compute( *model_normals );
+        norm_est.setKSearch (10);
+        norm_est.setInputCloud (model);
+        norm_est.compute (*model_normals);
 
-        norm_est.setInputCloud( scene );
-        norm_est.compute( *scene_normals );
+        norm_est.setInputCloud (scene);
+        norm_est.compute (*scene_normals);
 
-        /*
-         *
-         *  Downsample Clouds to Extract keypoints
-         *
-         */
+        //
+        //  Downsample Clouds to Extract keypoints
+        //
+
         pcl::UniformSampling<PointType> uniform_sampling;
-        uniform_sampling.setInputCloud( model );
-        uniform_sampling.setRadiusSearch( model_ss_ );
-        /* uniform_sampling.filter (*model_keypoints); */
-        pcl::PointCloud<int> keypointIndices1;
-        uniform_sampling.compute( keypointIndices1 );
-        pcl::copyPointCloud( *model, keypointIndices1.points, *model_keypoints );
-        std::cout << "Model total points: " << model->size() << "; Selected Keypoints: " << model_keypoints->size() << std::endl;
+        uniform_sampling.setInputCloud (model);
+        uniform_sampling.setRadiusSearch (model_ss_);
+        uniform_sampling.filter (*model_keypoints);
+        std::cout << "Model total points: " << model->size () << "; Selected Keypoints: " << model_keypoints->size () << std::endl;
 
-
-        uniform_sampling.setInputCloud( scene );
-        uniform_sampling.setRadiusSearch( scene_ss_ );
-        /* uniform_sampling.filter (*scene_keypoints); */
-        pcl::PointCloud<int> keypointIndices2;
-        uniform_sampling.compute( keypointIndices2 );
-        pcl::copyPointCloud( *scene, keypointIndices2.points, *scene_keypoints );
-        std::cout << "Scene total points: " << scene->size() << "; Selected Keypoints: " << scene_keypoints->size() << std::endl;
+        uniform_sampling.setInputCloud (scene);
+        uniform_sampling.setRadiusSearch (scene_ss_);
+        uniform_sampling.filter (*scene_keypoints);
+        std::cout << "Scene total points: " << scene->size () << "; Selected Keypoints: " << scene_keypoints->size () << std::endl;
 
         /*
          *
@@ -149,11 +144,11 @@ bool object_recognizer::recognize( std::vector<Eigen::Matrix3f> &rotation, std::
         match_search.setInputCloud( model_descriptors );
 
         /*  For each scene keypoint descriptor, find nearest neighbor into the model keypoints descriptor cloud and add it to the correspondences vector. */
-        for ( size_t i = 0; i < scene_descriptors->size(); ++i )
+        for ( std::size_t i = 0; i < scene_descriptors->size(); ++i )
         {
             std::vector<int>    neigh_indices( 1 );
             std::vector<float>  neigh_sqr_dists( 1 );
-            if ( !pcl_isfinite( scene_descriptors->at( i ).descriptor[0] ) )        /* skipping NaNs */
+            if ( !std::isfinite( scene_descriptors->at( i ).descriptor[0] ) )        /* skipping NaNs */
             {
                 continue;
             }
@@ -218,10 +213,10 @@ bool object_recognizer::recognize( std::vector<Eigen::Matrix3f> &rotation, std::
         rotation.resize( rototranslations.size() );
         translation.resize( rototranslations.size() );
         std::cout << "Model instances found: " << rototranslations.size () << std::endl;
-        if (rototranslations.size() == 0) {
+        if (rototranslations.empty()) {
             return(false);
         }
-        for ( size_t i = 0; i < rototranslations.size(); ++i )
+        for ( std::size_t i = 0; i < rototranslations.size(); ++i )
         {
             std::cout << "\nInstance " << i + 1 << ":" << std::endl;
             std::cout << "Correspondences belonging to this instance: " << correspondences[i].size () << std::endl;
@@ -242,8 +237,8 @@ bool object_recognizer::recognize( std::vector<Eigen::Matrix3f> &rotation, std::
 }
 
 
-bool object_recognizer::recognize( std::vector<Eigen::Matrix3f> &rotation, std::vector<Eigen::Vector3f> &translation,
-                   std::vector<pcl::Correspondences> &correspondences )
+bool ObjectRecognizer::recognize(std::vector<Eigen::Matrix3f> &rotation, std::vector<Eigen::Vector3f> &translation,
+                                 std::vector<pcl::Correspondences> &correspondences )
 {
     if ( recognize( rotation, translation ) )
     {
@@ -263,7 +258,7 @@ bool object_recognizer::recognize( std::vector<Eigen::Matrix3f> &rotation, std::
 }
 
 
-bool object_recognizer::find_best( Eigen::Matrix3f &rotation, Eigen::Vector3f &translation )
+bool ObjectRecognizer::find_best(Eigen::Matrix3f &rotation, Eigen::Vector3f &translation )
 {
     std::vector<Eigen::Matrix3f>    temp_rotation;
     std::vector<Eigen::Vector3f>    temp_translation;
@@ -298,7 +293,7 @@ bool object_recognizer::find_best( Eigen::Matrix3f &rotation, Eigen::Vector3f &t
     }
 }
 
-bool object_recognizer::find_best( geometry_msgs::Pose &object_pose )
+bool ObjectRecognizer::find_best(geometry_msgs::Pose &object_pose )
 {
     Eigen::Matrix3f    temp_rotation;
     Eigen::Vector3f    temp_translation;
@@ -307,15 +302,15 @@ bool object_recognizer::find_best( geometry_msgs::Pose &object_pose )
         object_pose.position.x = temp_translation[0];
         object_pose.position.y = temp_translation[1];
         object_pose.position.z = temp_translation[2];
-    } else {
-        return(false);
+        return(true);
     }
+    return(false);
 }
 
 
-void object_recognizer::pcl_visualize()
+void ObjectRecognizer::pcl_visualize()
 {
-    pcl::visualization::PCLVisualizer viewer( "Correspondence Grouping" );
+    pcl::visualization::PCLVisualizer viewer( "ObjectRecognizer");
     viewer.addPointCloud( scene, "scene_cloud" );
 
     pcl::PointCloud<PointType>::Ptr off_scene_model( new pcl::PointCloud<PointType> () );
@@ -376,7 +371,7 @@ void object_recognizer::pcl_visualize()
 }
 
 
-void object_recognizer::kinectCB( const sensor_msgs::PointCloud2ConstPtr & cloud )
+void ObjectRecognizer::kinectCB(const sensor_msgs::PointCloud2ConstPtr & cloud )
 {
     if ( !got_kinect_cloud_ )
     {
@@ -386,7 +381,7 @@ void object_recognizer::kinectCB( const sensor_msgs::PointCloud2ConstPtr & cloud
 }
 
 
-void object_recognizer::timerCB( const ros::TimerEvent & )
+void ObjectRecognizer::timerCB(const ros::TimerEvent & )
 {
     if (have_scene)
     {
@@ -428,7 +423,7 @@ void object_recognizer::timerCB( const ros::TimerEvent & )
 
 }
 
-geometry_msgs::Quaternion object_recognizer::rotation2quat(Eigen::Matrix3f rotation) {
+geometry_msgs::Quaternion ObjectRecognizer::rotation2quat(Eigen::Matrix3f rotation) {
     // Output quaternion
     geometry_msgs::Quaternion quaternion;
     float w,x,y,z;
